@@ -4,17 +4,22 @@
  */
 package oceanguard;
 
+import mainmenu.MainMenu;
+
 /**
  *
  * @author travislixx
  */
-public class OceanGuard {
+
+
+public class OceanGuardApp {
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        new MainMenu().setVisible(true);
     }
     
 }
