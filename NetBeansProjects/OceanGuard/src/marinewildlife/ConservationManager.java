@@ -6,8 +6,11 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
-public class ConservationManager {
+
+import javax.swing.*;
+import java.awt.*;
+public class ConservationManager extends JFrame {
     
 }

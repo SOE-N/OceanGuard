@@ -6,8 +6,18 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
-public class VolunteerForm {
-    
+
+import javax.swing.*;
+import java.awt.*;
+public class VolunteerForm extends JFrame{
+    public VolunteerForm() {
+
+    setTitle("Volunteer Registration");
+    setSize(450, 400);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(null);
+
+}
 }

@@ -6,8 +6,18 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
-public class MonitoringForm {
-    
+import javax.swing.*;
+import java.awt.*;
+
+public class MonitoringForm extends JFrame{
+    public MonitoringForm() {
+
+    setTitle("Wildlife Monitoring");
+    setSize(450, 400);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(null);
+
+}
 }

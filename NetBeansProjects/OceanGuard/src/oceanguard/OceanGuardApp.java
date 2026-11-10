@@ -19,7 +19,10 @@ public class OceanGuardApp {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        new MainMenu().setVisible(true);
+        
+
+        MainMenu menu = new MainMenu();
+        menu.setVisible(true);
     }
     
 }

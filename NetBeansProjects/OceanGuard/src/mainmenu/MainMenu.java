@@ -6,83 +6,114 @@ package mainmenu;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
 
-// Import Swing components for creating the GUI
+
 import javax.swing.*;
+import java.awt.*;
 
-// Import WildlifeUI from the marinewildlife package
+// Import the WildlifeUI class from the marinewildlife package
 import marinewildlife.WildlifeUI;
-
-// MainMenu class inherits from JFrame to create a window
 public class MainMenu extends JFrame {
 
-    // Declare buttons for the three OceanGuard sections
+    // Declare objects
+    private JLabel title;
+    private JPanel panel;
     private JButton btnPollution;
     private JButton btnWildlife;
     private JButton btnFishing;
+    private JButton btnExit;
+    
+    // creating a new object
+    WildlifeUI wildlife = new WildlifeUI();
 
-    // Constructor: creates the OceanGuard main menu
+    
     public MainMenu() {
+        
+        setTitle("OceanGuard");  // Set the title of the application window
+        setSize(500, 500); // Set the window width and height       
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close the application when the main menu is closed      
+        setLocationRelativeTo(null); // Display the window in the centre of the screen
+        
+        panel = new JPanel();
+        //panel.setLayout(null);   
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));// Arrange the components vertically
+        // panel.setBackground(Color.GRAY);
+        add(panel); // Add the panel to the main window
+    
+        // Create title
+        title = new JLabel("OceanGuard Application");
+        title.setFont(new java.awt.Font("Times New Roman", Font.BOLD, 45));
+        //title.setBounds(75, 40, 350, 80);
+        //panel.add(title);
 
-        // Set the title of the application window
-        setTitle("OceanGuard");
-
-        // Set the window width and height
-        setSize(450, 350);
-
-        // Close the application when the main menu is closed
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        // Display the window in the centre of the screen
-        setLocationRelativeTo(null);
-
-        // Create a label to display the application title
-        JLabel title = new JLabel("OceanGuard", SwingConstants.CENTER);
-
-        // Set the font style, size and weight of the title
-        title.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 28));
-
-        // Create buttons for the three project sections
+        // Create buttons
         btnPollution = new JButton("Marine Pollution Management");
+        btnPollution.setPreferredSize(new Dimension(350, 80));
+        btnPollution.setMaximumSize(new Dimension(350, 80));
+        //btnPollution.setBounds(100, 150, 300, 80);       
+        //panel.add(btnPollution);
+
         btnWildlife = new JButton("Marine Wildlife Conservation");
+        btnWildlife.setPreferredSize(new Dimension(350, 80));
+        btnWildlife.setMaximumSize(new Dimension(350, 80));
+        //btnWildlife.setBounds(100, 250, 300, 80);
+        //panel.add(btnWildlife);
+
         btnFishing = new JButton("Sustainable Fishing Management");
-
-        // Create a panel to hold the title and buttons
-        JPanel panel = new JPanel();
-
-        // Arrange the components vertically
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        // Centre the title and buttons horizontally
+        btnFishing.setPreferredSize(new Dimension(350, 80));
+        btnFishing.setMaximumSize(new Dimension(350, 80));
+        //btnFishing.setBounds(100, 350, 300, 80);
+        //panel.add(btnFishing);
+        
+        btnExit = new JButton("Exit");
+        btnExit.setPreferredSize(new Dimension(200, 50));
+        btnExit.setMaximumSize(new Dimension(200, 50));
+        
+        
+        // Centre components horizontally
         title.setAlignmentX(CENTER_ALIGNMENT);
         btnPollution.setAlignmentX(CENTER_ALIGNMENT);
         btnWildlife.setAlignmentX(CENTER_ALIGNMENT);
         btnFishing.setAlignmentX(CENTER_ALIGNMENT);
+        btnExit.setAlignmentX(CENTER_ALIGNMENT);
 
         // Add spacing and components to the panel
-        panel.add(Box.createVerticalStrut(40));
+        // Add 30 pixels of vertical spacing above the title
+        panel.add(Box.createVerticalStrut(30));
         panel.add(title);
+        panel.add(Box.createVerticalStrut(30)); // Add 30 pixels of vertical spacing below the title
+        
+        
         panel.add(Box.createVerticalStrut(30));
         panel.add(btnPollution);
+        
         panel.add(Box.createVerticalStrut(15));
         panel.add(btnWildlife);
+        
         panel.add(Box.createVerticalStrut(15));
         panel.add(btnFishing);
+        
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(btnExit);
+        
+        panel.add(Box.createVerticalStrut(30)); 
 
-        // Add the panel to the main window
-        add(panel);
-
-        // Add an action listener to the Wildlife button
-        btnWildlife.addActionListener(e -> {
-
-            // Create and display the WildlifeUI window
-            new WildlifeUI().setVisible(true);
-
-            // Close the main menu window
-            this.dispose();
+        
+        
+        // Open the Wildlife section
+        btnWildlife.addActionListener(e -> { //( e -> )Lambda expression receiving the event
+             openWildlife(); //  Calls the openWildlife() method
         });
+        
+        // Add an ActionListener to the Exit button
+        btnExit.addActionListener(e -> {
+            System.exit(0); // Terminate the entire application
+        });
+        
+        
+        
     }
 
     // Method reserved for opening the Pollution section later
@@ -91,17 +122,15 @@ public class MainMenu extends JFrame {
     }
 
     // Method to open the Wildlife section
-    public void openWildlife() {
-
-        // Create and display the WildlifeUI window
-        new WildlifeUI().setVisible(true);
-
-        // Close the main menu window
-        this.dispose();
+    public void openWildlife() {       
+        wildlife.setVisible(true); // Create and display the WildlifeUI window       
+        this.dispose(); // Close the main menu window
     }
 
     // Method reserved for opening the Fishing section later
     public void openFishing() {
         // Connect Member 3's section later
     }
+    
+    
 }

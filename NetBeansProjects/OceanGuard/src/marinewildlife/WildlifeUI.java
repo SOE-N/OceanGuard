@@ -6,37 +6,91 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe 
  */
 import javax.swing.*;
+import java.awt.*;
+import mainmenu.MainMenu;
 
-// Import Swing components to create the graphical user interface
-
-// WildlifeUI class inherits from JFrame to create a window
 public class WildlifeUI extends JFrame {
+    private JMenuBar menuBar;
+    private JMenuItem rescue;
+    private JMenuItem monitoring;
+    private JMenuItem volunteer;
+    private JMenuItem home;
+    
+    private JLabel title;
+    
+    
 
-    // Constructor: creates the Marine Wildlife Conservation window
     public WildlifeUI() {
 
-        // Set the title of the window
-        setTitle("Marine Wildlife Conservation");
+        
+        setTitle("Marine Wildlife Conservation"); // Set the title of the window       
+        setSize(500, 400); // Set the width to 500 pixels and height to 400 pixels       
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close this window without terminating the entire application       
+        setLocationRelativeTo(null); // Position the window in the centre of the screen
 
-        // Set the width to 500 pixels and height to 400 pixels
-        setSize(500, 400);
+        
+        menuBar = new JMenuBar(); // Create navigation bar     
+        rescue = new JMenuItem("Rescue Report");
+        monitoring = new JMenuItem("Monitoring");
+        volunteer = new JMenuItem("Volunteer");
+        home = new JMenuItem("Home");
+        
+        // Add items to navigation bar
+        menuBar.add(rescue);
+        menuBar.add(monitoring);
+        menuBar.add(volunteer);
+        menuBar.add(home);       
+        setJMenuBar(menuBar); // Display navigation bar at the top
+        
+        JPanel panel = new JPanel(); // Create main panel
+        panel.setLayout(new BorderLayout());
+        
+        // Create section title
+        title = new JLabel("Marine Wildlife Conservation",SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 28));
 
-        // Close this window without terminating the entire application
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Position the window in the centre of the screen
-        setLocationRelativeTo(null);
+        // Create content panel
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayout(2, 1, 10, 10));
 
-        // Create a JLabel to display the section title
-        JLabel title = new JLabel(
-            "Marine Wildlife Conservation",
-            SwingConstants.CENTER
-        );
+        contentPanel.add(title);
 
-        // Add the title label to the window
-        add(title);
+        // Add content to main panel
+        panel.add(contentPanel, BorderLayout.CENTER);
+
+        // Add main panel to window
+        add(panel);
+
+        // Open Rescue Report Form
+        rescue.addActionListener(e -> {
+            new RescueReportForm().setVisible(true);
+            dispose();
+        });
+
+        // Open Monitoring Form
+        monitoring.addActionListener(e -> {
+            new MonitoringForm().setVisible(true);
+            dispose();
+        });
+
+        // Open Volunteer Form
+        volunteer.addActionListener(e -> {
+            new VolunteerForm().setVisible(true);
+            dispose();
+        });
+
+        // Return to Main Menu
+        home.addActionListener(e -> {
+            MainMenu mygui = new MainMenu();
+            mygui.setVisible(true);
+            dispose();
+        });
+
+
+        
     }
 }

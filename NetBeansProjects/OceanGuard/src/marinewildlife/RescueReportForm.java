@@ -6,8 +6,17 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
-public class RescueReportForm {
-    
+import javax.swing.*;
+import java.awt.*;
+public class RescueReportForm extends JFrame {
+    public RescueReportForm() {
+
+    setTitle("Wildlife Rescue Report");
+    setSize(450, 400);
+    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    setLocationRelativeTo(null);
+
+}
 }
