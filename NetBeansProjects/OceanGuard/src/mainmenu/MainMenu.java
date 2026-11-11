@@ -15,6 +15,7 @@ import java.awt.*;
 
 // Import the WildlifeUI class from the marinewildlife package
 import marinewildlife.WildlifeUI;
+import fishing.FishingMenu;
 public class MainMenu extends JFrame {
 
     // Declare objects
@@ -107,6 +108,11 @@ public class MainMenu extends JFrame {
              openWildlife(); //  Calls the openWildlife() method
         });
         
+        // Open the Fishing section
+        btnFishing.addActionListener(e -> {
+            openFishing();
+        });
+        
         // Add an ActionListener to the Exit button
         btnExit.addActionListener(e -> {
             System.exit(0); // Terminate the entire application
@@ -130,6 +136,10 @@ public class MainMenu extends JFrame {
     // Method reserved for opening the Fishing section later
     public void openFishing() {
         // Connect Member 3's section later
+         FishingMenu fishing = new FishingMenu();
+        fishing.setLocationRelativeTo(null);
+        fishing.setVisible(true);
+        this.dispose();
     }
     
     
