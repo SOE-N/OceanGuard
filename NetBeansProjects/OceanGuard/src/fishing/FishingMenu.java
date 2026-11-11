@@ -57,8 +57,10 @@ public class FishingMenu extends javax.swing.JFrame {
         btnManageBoats.addActionListener(this::btnManageBoatsActionPerformed);
 
         btnCheckLimits.setText("Check Catch Limits");
+        btnCheckLimits.addActionListener(this::btnCheckLimitsActionPerformed);
 
         btnBack.setText("Back to Main Menu");
+        btnBack.addActionListener(this::btnBackActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,10 +110,20 @@ public class FishingMenu extends javax.swing.JFrame {
 
     private void btnViewRecordsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRecordsActionPerformed
         // TODO add your handling code here:
+        ViewRecordsForm form = new ViewRecordsForm();
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+        this.dispose();
+
     }//GEN-LAST:event_btnViewRecordsActionPerformed
 
     private void btnManageBoatsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageBoatsActionPerformed
         // TODO add your handling code here:
+        ManageBoatsForm form = new ManageBoatsForm();
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+        this.dispose();
+        
     }//GEN-LAST:event_btnManageBoatsActionPerformed
 
     private void btnRegisterCatchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterCatchActionPerformed
@@ -121,6 +133,24 @@ public class FishingMenu extends javax.swing.JFrame {
         form.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnRegisterCatchActionPerformed
+
+    private void btnCheckLimitsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCheckLimitsActionPerformed
+        // TODO add your handling code here:
+        CheckLimitsForm form = new CheckLimitsForm();
+        form.setLocationRelativeTo(null);
+        form.setVisible(true);
+        this.dispose();
+        
+    }//GEN-LAST:event_btnCheckLimitsActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+            mainmenu.MainMenu menu = new mainmenu.MainMenu();
+        menu.setLocationRelativeTo(null);
+        menu.setVisible(true);
+        this.dispose();
+
+    }//GEN-LAST:event_btnBackActionPerformed
 
     /**
      * @param args the command line arguments
