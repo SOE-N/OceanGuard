@@ -6,8 +6,12 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
+
+import javax.swing.*;
+import java.awt.*;
+
 public class MonitoringForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MonitoringForm.class.getName());
@@ -28,21 +32,237 @@ public class MonitoringForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panel = new javax.swing.JPanel();
+        wildlifeLB = new javax.swing.JLabel();
+        recordLB = new javax.swing.JLabel();
+        speciesLB = new javax.swing.JLabel();
+        recordTF = new javax.swing.JTextField();
+        speciesTF = new javax.swing.JTextField();
+        locationLB = new javax.swing.JLabel();
+        dateLB = new javax.swing.JLabel();
+        locationTF = new javax.swing.JTextField();
+        dateTF = new javax.swing.JTextField();
+        numberSeenLB = new javax.swing.JLabel();
+        behaviorLB = new javax.swing.JLabel();
+        numberSeenTF = new javax.swing.JTextField();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        submittedTA = new javax.swing.JTextArea();
+        submitBtn = new javax.swing.JButton();
+        clearBtn = new javax.swing.JButton();
+        backBtn = new javax.swing.JButton();
+        exitBtn = new javax.swing.JButton();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        wildlifeLB.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+        wildlifeLB.setText("Wildlife Monitoring");
+
+        recordLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        recordLB.setText("Record ID");
+
+        speciesLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        speciesLB.setText("Species");
+
+        recordTF.setText("Enter Record ID");
+        recordTF.addActionListener(this::recordTFActionPerformed);
+
+        speciesTF.setText("Enter Species");
+        speciesTF.addActionListener(this::speciesTFActionPerformed);
+
+        locationLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        locationLB.setText("Location");
+
+        dateLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        dateLB.setText("Date");
+
+        locationTF.setText("Enter Location ");
+        locationTF.addActionListener(this::locationTFActionPerformed);
+
+        dateTF.setText("Enter Date");
+        dateTF.addActionListener(this::dateTFActionPerformed);
+
+        numberSeenLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        numberSeenLB.setText("Number seen");
+
+        behaviorLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        behaviorLB.setText("Behavior ");
+
+        numberSeenTF.setText("Enter Number");
+
+        jTextField4.setText("Select Behavior");
+
+        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        jLabel7.setText("Monitoring Records");
+
+        submittedTA.setColumns(20);
+        submittedTA.setRows(5);
+        jScrollPane1.setViewportView(submittedTA);
+
+        submitBtn.setText("Submit");
+
+        clearBtn.setText("Clear");
+
+        backBtn.setText("Back");
+        backBtn.addActionListener(this::backBtnActionPerformed);
+
+        exitBtn.setText("Exit");
+        exitBtn.addActionListener(this::exitBtnActionPerformed);
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(45, 45, 45)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(313, 313, 313)
+                        .addComponent(wildlifeLB, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(locationLB)
+                                    .addComponent(numberSeenLB)
+                                    .addComponent(locationTF, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
+                                    .addComponent(numberSeenTF))
+                                .addGap(150, 150, 150)
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(behaviorLB)
+                                            .addComponent(dateLB))
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(dateTF)
+                                    .addComponent(jTextField4)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(recordLB, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(recordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(speciesTF, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(speciesLB, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(122, 122, 122))))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(125, 125, 125)
+                .addComponent(submitBtn)
+                .addGap(119, 119, 119)
+                .addComponent(clearBtn)
+                .addGap(113, 113, 113)
+                .addComponent(backBtn)
+                .addGap(94, 94, 94)
+                .addComponent(exitBtn)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addComponent(wildlifeLB, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(speciesLB)
+                    .addComponent(recordLB, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(speciesTF, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
+                    .addComponent(recordTF))
+                .addGap(18, 18, 18)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(locationLB)
+                    .addComponent(dateLB))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(locationTF)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(numberSeenLB)
+                    .addComponent(behaviorLB))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(numberSeenTF, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submitBtn)
+                    .addComponent(clearBtn)
+                    .addComponent(backBtn)
+                    .addComponent(exitBtn))
+                .addGap(0, 53, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void recordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_recordTFActionPerformed
+
+    private void speciesTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speciesTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_speciesTFActionPerformed
+
+    private void locationTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_locationTFActionPerformed
+
+    private void dateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dateTFActionPerformed
+
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+        // TODO add your handling code here:
+        WildlifeUI wildlife = new WildlifeUI();
+        wildlife.setVisible(true);
+
+        dispose();
+    }//GEN-LAST:event_backBtnActionPerformed
+
+    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
+        // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to exit OceanGuard?",
+            "Exit Confirmation",
+            JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_exitBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +290,26 @@ public class MonitoringForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backBtn;
+    private javax.swing.JLabel behaviorLB;
+    private javax.swing.JButton clearBtn;
+    private javax.swing.JLabel dateLB;
+    private javax.swing.JTextField dateTF;
+    private javax.swing.JButton exitBtn;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JLabel locationLB;
+    private javax.swing.JTextField locationTF;
+    private javax.swing.JLabel numberSeenLB;
+    private javax.swing.JTextField numberSeenTF;
+    private javax.swing.JPanel panel;
+    private javax.swing.JLabel recordLB;
+    private javax.swing.JTextField recordTF;
+    private javax.swing.JLabel speciesLB;
+    private javax.swing.JTextField speciesTF;
+    private javax.swing.JButton submitBtn;
+    private javax.swing.JTextArea submittedTA;
+    private javax.swing.JLabel wildlifeLB;
     // End of variables declaration//GEN-END:variables
 }
