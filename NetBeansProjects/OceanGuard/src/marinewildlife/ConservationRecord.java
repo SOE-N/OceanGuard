@@ -6,7 +6,7 @@ package marinewildlife;
 
 /**
  *
- * @author travislixx
+ * @author Soe
  */
 public class ConservationRecord {
     // Common attributes shared by both child classes
