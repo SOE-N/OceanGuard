@@ -3,22 +3,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package mainmenu;
-
 import marinewildlife.WildlifeUI;
-
+import java.awt.*;
 /**
  *
- * @author travislixx
+ * @author Soe
  */
 public class MainMenu extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainMenu.class.getName());
 
     /**
-     * Creates new form MainMenuUI
+     * Creates new form MainMenu
      */
     public MainMenu() {
         initComponents();
+        MainLB.setForeground(Color.WHITE);
     }
 
     /**
@@ -30,78 +30,59 @@ public class MainMenu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        OceanLB = new javax.swing.JLabel();
+        mainP = new javax.swing.JPanel();
+        MainLB = new javax.swing.JLabel();
         PollutionBtn = new javax.swing.JButton();
         ConservationBtn = new javax.swing.JButton();
         FishingBtn = new javax.swing.JButton();
         ExitBtn = new javax.swing.JButton();
+        backgroundLB = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        OceanLB.setFont(new java.awt.Font("Times New Roman", 0, 36)); // NOI18N
-        OceanLB.setText("OceanGuard Application");
+        mainP.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        MainLB.setFont(new java.awt.Font("Times New Roman", 0, 36)); // NOI18N
+        MainLB.setText("OceanGuard Application");
+        mainP.add(MainLB, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, -1, -1));
+
+        PollutionBtn.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
         PollutionBtn.setText("Marine Pollution Management");
         PollutionBtn.addActionListener(this::PollutionBtnActionPerformed);
+        mainP.add(PollutionBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 140, 230, 40));
 
-        ConservationBtn.setText("Marine Wildlfie Conservation");
+        ConservationBtn.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
+        ConservationBtn.setText("Marine Wildlife Conservation");
         ConservationBtn.addActionListener(this::ConservationBtnActionPerformed);
+        mainP.add(ConservationBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 210, 230, 40));
 
+        FishingBtn.setBackground(new java.awt.Color(51, 255, 153));
+        FishingBtn.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
         FishingBtn.setText("Sustainable Fishing Management");
         FishingBtn.addActionListener(this::FishingBtnActionPerformed);
+        mainP.add(FishingBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 280, 230, 40));
 
-        ExitBtn.setText("Exit ");
+        ExitBtn.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
+        ExitBtn.setText("Exit");
         ExitBtn.addActionListener(this::ExitBtnActionPerformed);
+        mainP.add(ExitBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 360, -1, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(315, 315, 315)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(PollutionBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(82, 82, 82)
-                                .addComponent(ExitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(ConservationBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(FishingBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(263, 263, 263)
-                        .addComponent(OceanLB)))
-                .addContainerGap(336, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(OceanLB)
-                .addGap(41, 41, 41)
-                .addComponent(PollutionBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(ConservationBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(FishingBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66)
-                .addComponent(ExitBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(136, 136, 136))
-        );
+        backgroundLB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/mainmenu/background.png"))); // NOI18N
+        mainP.add(backgroundLB, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 930, 570));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(mainP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainP, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void PollutionBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PollutionBtnActionPerformed
@@ -155,8 +136,9 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JButton ConservationBtn;
     private javax.swing.JButton ExitBtn;
     private javax.swing.JButton FishingBtn;
-    private javax.swing.JLabel OceanLB;
+    private javax.swing.JLabel MainLB;
     private javax.swing.JButton PollutionBtn;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel backgroundLB;
+    private javax.swing.JPanel mainP;
     // End of variables declaration//GEN-END:variables
 }
