@@ -8,8 +8,6 @@ package marinewildlife;
  *
  * @author Soe
  */
-import javax.swing.*;
-import java.awt.*;
 public class RescueReport extends ConservationRecord {
     private String condition;
 
@@ -35,14 +33,8 @@ public class RescueReport extends ConservationRecord {
     public void setCondition(String condition) {
         this.condition = condition;
     }
-
-    @Override
-    public String toString() {
-        return "RescueReport{" + "condition=" + condition + '}';
-    }
     
-    
-
+   
     // Display rescue report details
     @Override
     public String getDetails() {

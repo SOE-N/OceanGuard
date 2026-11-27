@@ -9,11 +9,19 @@ package marinewildlife;
  * @author Soe
  */
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.Locale;
+import java.util.ArrayList;
 
 public class MonitoringForm extends javax.swing.JFrame {
-    
+    private int monitoringCounter = 1;
+    private ArrayList<Monitoring> monitoringList = new ArrayList<>();
+    private final String FILE_NAME = "monitoring.dat";
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MonitoringForm.class.getName());
 
     /**
@@ -21,6 +29,96 @@ public class MonitoringForm extends javax.swing.JFrame {
      */
     public MonitoringForm() {
         initComponents();
+        
+        BehaviorCB.setSelectedIndex(0);
+        addPlaceholder(speciesTF, "Enter species name");
+        addPlaceholder(numberSeenTF, "Enter number seen");
+        addPlaceholder(locationTF, "Enter location");
+        addPlaceholder(dateTF, "DD/MM/YYYY");
+        addPlaceholder(DescriptionTF, "Enter description");
+        
+        loadMonitoringData();
+        setLocationRelativeTo(null);    
+
+    }
+   
+    
+    // Placeholder method 
+    private void addPlaceholder(javax.swing.JTextField field, String placeholder) {
+
+        field.setText(placeholder);
+        field.setForeground(Color.GRAY);
+
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(Color.GRAY);
+                }
+            }
+        });
+    }
+    
+    private void saveMonitoringData() {
+            try (java.io.ObjectOutputStream output =
+                    new java.io.ObjectOutputStream(
+                            new java.io.FileOutputStream(FILE_NAME))) {
+
+                output.writeObject(monitoringList);
+
+                JOptionPane.showMessageDialog(this,
+                        "Monitoring records saved successfully!");
+
+            } catch (java.io.IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Error saving records: " + e.getMessage());
+            }
+        }
+    
+    private void loadMonitoringData() {
+
+        java.io.File file = new java.io.File(FILE_NAME);
+
+        if (!file.exists()) {
+            return;
+        }
+
+        try (java.io.ObjectInputStream input =
+                new java.io.ObjectInputStream(
+                        new java.io.FileInputStream(FILE_NAME))) {
+
+            monitoringList = (ArrayList<Monitoring>) input.readObject();
+
+            // Update the ID counter
+            monitoringCounter = monitoringList.size() + 1;
+
+            // Display saved records
+            MonitoringJSP.setText("");
+
+            for (Monitoring monitoring : monitoringList) {
+
+                MonitoringJSP.append(monitoring.getDetails()
+                        + "\nNumber Seen: " + monitoring.getNumberSeen()
+                        + "\nBehaviour: " + monitoring.getBehaviour()
+                        + "\nDescription: " + monitoring.getDescription()
+                        + "\n-----------------------------\n");
+            }
+
+        } catch (java.io.IOException | ClassNotFoundException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Error loading records: " + e.getMessage());
+        }
     }
 
     /**
@@ -34,9 +132,7 @@ public class MonitoringForm extends javax.swing.JFrame {
 
         panel = new javax.swing.JPanel();
         wildlifeLB = new javax.swing.JLabel();
-        recordLB = new javax.swing.JLabel();
         speciesLB = new javax.swing.JLabel();
-        recordTF = new javax.swing.JTextField();
         speciesTF = new javax.swing.JTextField();
         locationLB = new javax.swing.JLabel();
         dateLB = new javax.swing.JLabel();
@@ -45,30 +141,28 @@ public class MonitoringForm extends javax.swing.JFrame {
         numberSeenLB = new javax.swing.JLabel();
         behaviorLB = new javax.swing.JLabel();
         numberSeenTF = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        monitoringBL = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        submittedTA = new javax.swing.JTextArea();
+        MonitoringJSP = new javax.swing.JTextArea();
         submitBtn = new javax.swing.JButton();
         clearBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
         exitBtn = new javax.swing.JButton();
+        BehaviorCB = new javax.swing.JComboBox<>();
+        DescriptionLB = new javax.swing.JLabel();
+        DescriptionTF = new javax.swing.JTextField();
+        idTF = new javax.swing.JTextField();
+        SearchBtn = new javax.swing.JButton();
+        SearchLB = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         wildlifeLB.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         wildlifeLB.setText("Wildlife Monitoring");
 
-        recordLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        recordLB.setText("Record ID");
-
         speciesLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         speciesLB.setText("Species");
 
-        recordTF.setText("Enter Record ID");
-        recordTF.addActionListener(this::recordTFActionPerformed);
-
-        speciesTF.setText("Enter Species");
         speciesTF.addActionListener(this::speciesTFActionPerformed);
 
         locationLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
@@ -77,10 +171,8 @@ public class MonitoringForm extends javax.swing.JFrame {
         dateLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         dateLB.setText("Date");
 
-        locationTF.setText("Enter Location ");
         locationTF.addActionListener(this::locationTFActionPerformed);
 
-        dateTF.setText("Enter Date");
         dateTF.addActionListener(this::dateTFActionPerformed);
 
         numberSeenLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
@@ -89,26 +181,36 @@ public class MonitoringForm extends javax.swing.JFrame {
         behaviorLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
         behaviorLB.setText("Behavior ");
 
-        numberSeenTF.setText("Enter Number");
+        monitoringBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        monitoringBL.setText("Monitoring Records");
 
-        jTextField4.setText("Select Behavior");
-
-        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel7.setText("Monitoring Records");
-
-        submittedTA.setColumns(20);
-        submittedTA.setRows(5);
-        jScrollPane1.setViewportView(submittedTA);
+        MonitoringJSP.setColumns(20);
+        MonitoringJSP.setRows(5);
+        jScrollPane1.setViewportView(MonitoringJSP);
 
         submitBtn.setText("Submit");
+        submitBtn.addActionListener(this::submitBtnActionPerformed);
 
         clearBtn.setText("Clear");
+        clearBtn.addActionListener(this::clearBtnActionPerformed);
 
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
 
         exitBtn.setText("Exit");
         exitBtn.addActionListener(this::exitBtnActionPerformed);
+
+        BehaviorCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Behaviour --", "Swimming", "Feeding", "Resting", "Migrating", "Breeding", "Injured ", "Other" }));
+        BehaviorCB.addActionListener(this::BehaviorCBActionPerformed);
+
+        DescriptionLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        DescriptionLB.setText("Description");
+
+        SearchBtn.setText("Search");
+        SearchBtn.addActionListener(this::SearchBtnActionPerformed);
+
+        SearchLB.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        SearchLB.setText("Search Monitoring Record By ID :");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
@@ -118,92 +220,93 @@ public class MonitoringForm extends javax.swing.JFrame {
                 .addGap(45, 45, 45)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(313, 313, 313)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 768, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 76, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(locationLB)
+                            .addComponent(behaviorLB)
+                            .addComponent(BehaviorCB, 0, 346, Short.MAX_VALUE)
+                            .addComponent(speciesLB, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(monitoringBL)
+                            .addComponent(speciesTF)
+                            .addComponent(locationTF))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(numberSeenLB)
+                            .addComponent(DescriptionLB)
+                            .addComponent(dateLB)
+                            .addComponent(numberSeenTF)
+                            .addComponent(dateTF, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
+                            .addComponent(DescriptionTF))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(277, 277, 277)
                         .addComponent(wildlifeLB, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(panelLayout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(locationLB)
-                                    .addComponent(numberSeenLB)
-                                    .addComponent(locationTF, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-                                    .addComponent(numberSeenTF))
-                                .addGap(150, 150, 150)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelLayout.createSequentialGroup()
-                                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(behaviorLB)
-                                            .addComponent(dateLB))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(dateTF)
-                                    .addComponent(jTextField4)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(recordLB, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(recordTF, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(speciesTF, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(speciesLB, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(122, 122, 122))))
-            .addGroup(panelLayout.createSequentialGroup()
-                .addGap(125, 125, 125)
-                .addComponent(submitBtn)
-                .addGap(119, 119, 119)
-                .addComponent(clearBtn)
-                .addGap(113, 113, 113)
-                .addComponent(backBtn)
-                .addGap(94, 94, 94)
-                .addComponent(exitBtn)
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(42, 42, 42)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(submitBtn)
+                                .addGap(123, 123, 123)
+                                .addComponent(clearBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(backBtn)
+                                .addGap(105, 105, 105)
+                                .addComponent(exitBtn))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(SearchLB)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(SearchBtn)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelLayout.createSequentialGroup()
                 .addComponent(wildlifeLB, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
+                .addGap(45, 45, 45)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(speciesLB)
-                    .addComponent(recordLB, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(numberSeenLB))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(speciesTF, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE)
-                    .addComponent(recordTF))
+                    .addComponent(speciesTF, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(numberSeenTF))
+                .addGap(35, 35, 35)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(locationLB, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(dateLB, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(locationTF, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                    .addComponent(dateTF))
                 .addGap(18, 18, 18)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(locationLB)
-                    .addComponent(dateLB))
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(13, 13, 13)
-                        .addComponent(dateTF, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(locationTF)))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(behaviorLB, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(DescriptionLB))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(numberSeenLB)
-                    .addComponent(behaviorLB))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(numberSeenTF, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addComponent(jLabel7)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(DescriptionTF, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                    .addComponent(BehaviorCB))
+                .addGap(26, 26, 26)
+                .addComponent(monitoringBL)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
+                .addGap(36, 36, 36)
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(submitBtn)
                     .addComponent(clearBtn)
                     .addComponent(backBtn)
                     .addComponent(exitBtn))
-                .addGap(0, 53, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SearchLB)
+                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(SearchBtn))
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -224,11 +327,8 @@ public class MonitoringForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void recordTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recordTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_recordTFActionPerformed
 
     private void speciesTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_speciesTFActionPerformed
         // TODO add your handling code here:
@@ -264,6 +364,143 @@ public class MonitoringForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_exitBtnActionPerformed
 
+    private void submitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitBtnActionPerformed
+        // TODO add your handling code here:
+        // Generate a unique Monitoring Record ID
+        
+        try {
+        // Get user inputs
+        // Generate a unique Monitoring Record ID
+        String recordID = String.format("MR%03d", monitoringCounter);
+        String species = speciesTF.getText().trim();
+        String location = locationTF.getText().trim();
+        String date = dateTF.getText().trim();
+        String numberSeenText = numberSeenTF.getText().trim();
+        String behaviour = BehaviorCB.getSelectedItem().toString(); // Get selected behaviour from ComboBox
+        String description = DescriptionTF.getText().trim();
+        
+        // Validate empty fields
+        if (species.isEmpty() || species.equals("Enter species name")
+        || location.isEmpty() || location.equals("Enter location")
+        || numberSeenText.isEmpty() || numberSeenText.equals("Enter number seen")
+        || date.isEmpty() || date.equals("DD/MM/YYYY")
+        || description.isEmpty() || description.equals("Enter description")) {
+
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            return;
+        }
+        
+        int numberSeen = Integer.parseInt(numberSeenText); // Convert String to int
+        
+        // Validate date format (DD/MM/YYYY)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                "dd/MM/uuuu", Locale.UK)
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        try {
+            LocalDate parsedDate = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Invalid date! Please use DD/MM/YYYY (e.g. 27/11/2026).");
+            return;
+        }
+       
+        // Reject negative numbers
+        if (numberSeen < 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Number seen cannot be negative.");
+            return;
+        }
+        
+        // Validate behaviour
+        if (BehaviorCB.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a behaviour.");
+            return;
+        }
+       
+        Monitoring monitoring = new Monitoring();   // Create Monitoring object
+
+        // Use setters to store information
+        monitoring.setRecordID(recordID);
+        monitoring.setSpecies(species);
+        monitoring.setLocation(location);
+        monitoring.setDate(date);
+        monitoring.setNumberSeen(numberSeen);
+        monitoring.setBehaviour(behaviour);
+        monitoring.setDescription(description);
+        
+        monitoringList.add(monitoring); // Add object to ArrayList
+        
+        monitoringCounter++; // Increment counter for the next record
+        
+        saveMonitoringData();
+
+        // Use getters to display information
+        MonitoringJSP.append(monitoring.getDetails()
+        + "\nNumber Seen: " + monitoring.getNumberSeen()
+        + "\nBehaviour: " + monitoring.getBehaviour()
+        + "\nDescription: " + monitoring.getDescription()
+        + "\n-----------------------------\n");
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this,
+                "Please enter a valid number for Number Seen.");
+    }
+    }//GEN-LAST:event_submitBtnActionPerformed
+
+    private void clearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearBtnActionPerformed
+        // TODO add your handling code here:
+        speciesTF.setText("");
+        locationTF.setText("");
+        dateTF.setText("");
+        numberSeenTF.setText("");
+        DescriptionTF.setText("");
+        BehaviorCB.setSelectedIndex(0); // Reset behaviour selection
+         
+    }//GEN-LAST:event_clearBtnActionPerformed
+
+    private void BehaviorCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BehaviorCBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BehaviorCBActionPerformed
+
+    private void SearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBtnActionPerformed
+        // TODO add your handling code here:
+        // Get the ID entered by the user
+        String searchID = idTF.getText().trim();
+
+        // Check if the search field is empty
+        if (searchID.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a Record ID.");
+            return;
+        }
+        
+        // Clear previous search result
+        MonitoringJSP.setText("");
+
+        // Search through the ArrayList
+        for (Monitoring monitoring : monitoringList) {
+
+            if (monitoring.getRecordID().equalsIgnoreCase(searchID)) {
+
+                // 4. Display the matching record
+                MonitoringJSP.setText(
+                        monitoring.getDetails()
+                        + "\nNumber Seen: " + monitoring.getNumberSeen()
+                        + "\nBehaviour: " + monitoring.getBehaviour()
+                        + "\nDescription: " + monitoring.getDescription());
+
+                return;
+            }
+        }
+
+        // 5. If no record is found
+        JOptionPane.showMessageDialog(this,
+                "No monitoring record found with ID: " + searchID);
+
+    }//GEN-LAST:event_SearchBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -290,26 +527,29 @@ public class MonitoringForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> BehaviorCB;
+    private javax.swing.JLabel DescriptionLB;
+    private javax.swing.JTextField DescriptionTF;
+    private javax.swing.JTextArea MonitoringJSP;
+    private javax.swing.JButton SearchBtn;
+    private javax.swing.JLabel SearchLB;
     private javax.swing.JButton backBtn;
     private javax.swing.JLabel behaviorLB;
     private javax.swing.JButton clearBtn;
     private javax.swing.JLabel dateLB;
     private javax.swing.JTextField dateTF;
     private javax.swing.JButton exitBtn;
-    private javax.swing.JLabel jLabel7;
+    private javax.swing.JTextField idTF;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JLabel locationLB;
     private javax.swing.JTextField locationTF;
+    private javax.swing.JLabel monitoringBL;
     private javax.swing.JLabel numberSeenLB;
     private javax.swing.JTextField numberSeenTF;
     private javax.swing.JPanel panel;
-    private javax.swing.JLabel recordLB;
-    private javax.swing.JTextField recordTF;
     private javax.swing.JLabel speciesLB;
     private javax.swing.JTextField speciesTF;
     private javax.swing.JButton submitBtn;
-    private javax.swing.JTextArea submittedTA;
     private javax.swing.JLabel wildlifeLB;
     // End of variables declaration//GEN-END:variables
 }
