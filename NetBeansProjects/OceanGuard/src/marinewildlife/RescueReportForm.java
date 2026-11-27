@@ -4,17 +4,29 @@
  */
 package marinewildlife;
 
-import javax.swing.JOptionPane;
+
+import java.io.*;
+import java.awt.*;
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.Locale;
+import java.util.ArrayList;
 
 /**
  *
  * @author Soe
  */
 
-import javax.swing.*;
-import java.awt.*;
-
 public class RescueReportForm extends javax.swing.JFrame {
+    
+    private int rescueCounter = 1;
+
+    private ArrayList<RescueReport> rescueList = new ArrayList<>();
+
+    private final String FILE_NAME = "rescueReport.dat";
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RescueReportForm.class.getName());
 
@@ -23,6 +35,86 @@ public class RescueReportForm extends javax.swing.JFrame {
      */
     public RescueReportForm() {
         initComponents();
+        
+        addPlaceholder(SpeciesTF, "Enter a species");
+        addPlaceholder(LocationTF, "Enter a location");
+        addPlaceholder(DateTF, "DD/MM/YYYY");
+        addPlaceholder(idTF, "Enter Rescue ID");
+        
+        ConditionCB.setSelectedIndex(0);
+
+        loadRescueData();
+
+        setLocationRelativeTo(null);
+     
+    }
+    
+    private void saveRescueData() {
+
+        try {
+            FileOutputStream file = new FileOutputStream(FILE_NAME);
+            ObjectOutputStream output = new ObjectOutputStream(file);
+
+            output.writeObject(rescueList);
+
+            output.close();
+            file.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error saving rescue records: " + e.getMessage());
+        }
+    }
+    
+    private void loadRescueData() {
+
+        try {
+            FileInputStream file = new FileInputStream(FILE_NAME);
+            ObjectInputStream input = new ObjectInputStream(file);
+
+            rescueList = (ArrayList<RescueReport>) input.readObject();
+
+            input.close();
+            file.close();
+
+            rescueCounter = rescueList.size() + 1;
+
+            for (RescueReport rescue : rescueList) {
+                ResuceTA.append(rescue.getDetails()
+                        + "\n--------------------------\n");
+            }
+
+        } catch (FileNotFoundException e) {
+            // No saved file exists yet.
+        } catch (IOException | ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading rescue records: " + e.getMessage());
+        }
+    }
+    
+    private void addPlaceholder(JTextField field, String placeholder) {
+
+        field.setText(placeholder);
+        field.setForeground(Color.GRAY);
+
+        field.addFocusListener(new java.awt.event.FocusAdapter() {
+
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(Color.BLACK);
+                }
+            }
+
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(Color.GRAY);
+                }
+            }
+        });
     }
 
     /**
@@ -35,73 +127,77 @@ public class RescueReportForm extends javax.swing.JFrame {
     private void initComponents() {
 
         panel1 = new java.awt.Panel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
+        SpeciesBL = new javax.swing.JLabel();
+        SpeciesTF = new javax.swing.JTextField();
+        LocationBL = new javax.swing.JLabel();
+        DateBL = new javax.swing.JLabel();
+        DateTF = new javax.swing.JTextField();
+        LocationTF = new javax.swing.JTextField();
+        ConditionBL = new javax.swing.JLabel();
+        RescueBL = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        exitBtn = new javax.swing.JButton();
-        backBtn = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
+        ResuceTA = new javax.swing.JTextArea();
+        SubmitBtn = new javax.swing.JButton();
+        ClearBtn = new javax.swing.JButton();
+        ExitBtn = new javax.swing.JButton();
+        BackBtn = new javax.swing.JButton();
+        RescueTitle = new javax.swing.JLabel();
+        ConditionCB = new javax.swing.JComboBox<>();
+        SearchBL = new javax.swing.JLabel();
+        SearchBtn = new javax.swing.JButton();
+        idTF = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel2.setText("Record\n");
+        SpeciesBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        SpeciesBL.setText("Species");
 
-        jLabel3.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel3.setText("Species");
+        SpeciesTF.setText("\n");
 
-        jTextField1.setText("Enter Record ID\n");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        LocationBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        LocationBL.setText("Location ");
 
-        jTextField2.setText("Enter Species \n");
+        DateBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        DateBL.setText("Date ");
 
-        jLabel4.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel4.setText("Location ");
+        DateTF.setText("\n");
 
-        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel5.setText("Date ");
+        LocationTF.setText("\n");
 
-        jTextField3.setText("DD/MM/YY");
+        ConditionBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        ConditionBL.setText("Condition\n");
 
-        jTextField4.setText("Enter Location\n");
+        RescueBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        RescueBL.setText("Rescue Report\n");
 
-        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel6.setText("Condition\n");
+        ResuceTA.setColumns(20);
+        ResuceTA.setRows(5);
+        jScrollPane1.setViewportView(ResuceTA);
 
-        jTextField5.setText("Select Condition");
-        jTextField5.addActionListener(this::jTextField5ActionPerformed);
+        SubmitBtn.setText("Submit\n");
+        SubmitBtn.addActionListener(this::SubmitBtnActionPerformed);
 
-        jLabel7.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
-        jLabel7.setText("Rescue Report\n");
+        ClearBtn.setText("Clear\n");
+        ClearBtn.addActionListener(this::ClearBtnActionPerformed);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        ExitBtn.setText("Exit\n");
+        ExitBtn.addActionListener(this::ExitBtnActionPerformed);
 
-        jButton1.setText("Submit\n");
+        BackBtn.setText("Back");
+        BackBtn.addActionListener(this::BackBtnActionPerformed);
 
-        jButton2.setText("Clear\n");
+        RescueTitle.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
+        RescueTitle.setText("Wildlife Rescue Report");
 
-        exitBtn.setText("Exit\n");
-        exitBtn.addActionListener(this::exitBtnActionPerformed);
+        ConditionCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Select Condition --", "Healthy", "Injured", "Critical", "Unconscious", "Deceased" }));
 
-        backBtn.setText("Back");
-        backBtn.addActionListener(this::backBtnActionPerformed);
+        SearchBL.setFont(new java.awt.Font("Helvetica Neue", 1, 13)); // NOI18N
+        SearchBL.setText("Search Rescue Report By ID: ");
 
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
-        jLabel8.setText("Wildlife Rescue Report");
+        SearchBtn.setText("Search\n");
+        SearchBtn.addActionListener(this::SearchBtnActionPerformed);
+
+        idTF.setText("\n");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -109,85 +205,89 @@ public class RescueReportForm extends javax.swing.JFrame {
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
                 .addGap(63, 63, 63)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(panel1Layout.createSequentialGroup()
-                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel1Layout.createSequentialGroup()
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LocationBL)
+                            .addComponent(LocationTF, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(SpeciesBL)
+                            .addComponent(SpeciesTF, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(94, 94, 94)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(DateTF)
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-                                    .addComponent(jTextField4))
-                                .addGap(94, 94, 94)
                                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField2)
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel5)
-                                            .addComponent(jLabel3))
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jTextField3)))
+                                    .addComponent(ConditionBL)
+                                    .addComponent(DateBL))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(ConditionCB, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(panel1Layout.createSequentialGroup()
+                                    .addComponent(RescueTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(277, 277, 277))
+                                .addGroup(panel1Layout.createSequentialGroup()
+                                    .addComponent(RescueBL)
+                                    .addGap(700, 700, 700)))
                             .addGroup(panel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(panel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(277, 277, 277))
-                                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 791, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7)))))
-                        .addGap(68, 68, 68))))
+                                .addComponent(SearchBL)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(289, 289, 289)))))
+                .addGap(68, 68, 68))
             .addGroup(panel1Layout.createSequentialGroup()
-                .addGap(140, 140, 140)
-                .addComponent(jButton1)
-                .addGap(90, 90, 90)
-                .addComponent(jButton2)
-                .addGap(125, 125, 125)
-                .addComponent(backBtn)
-                .addGap(85, 85, 85)
-                .addComponent(exitBtn)
+                .addGap(133, 133, 133)
+                .addComponent(SubmitBtn)
+                .addGap(80, 80, 80)
+                .addComponent(ClearBtn)
+                .addGap(136, 136, 136)
+                .addComponent(BackBtn)
+                .addGap(114, 114, 114)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(SearchBtn)
+                    .addComponent(ExitBtn))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(RescueTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
-                    .addComponent(jTextField1))
-                .addGap(18, 18, 18)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
+                    .addComponent(SpeciesBL)
+                    .addComponent(ConditionBL))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
-                    .addComponent(jTextField4))
+                    .addComponent(SpeciesTF, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(ConditionCB))
+                .addGap(27, 27, 27)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LocationBL)
+                    .addComponent(DateBL))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(DateTF, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(LocationTF))
                 .addGap(18, 18, 18)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
+                .addComponent(RescueBL)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGap(33, 33, 33)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(backBtn)
-                    .addComponent(exitBtn))
-                .addGap(39, 39, 39))
+                    .addComponent(SubmitBtn)
+                    .addComponent(ClearBtn)
+                    .addComponent(BackBtn)
+                    .addComponent(ExitBtn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SearchBL)
+                    .addComponent(SearchBtn)
+                    .addComponent(idTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(90, 90, 90))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -204,23 +304,15 @@ public class RescueReportForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
-
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    private void BackBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackBtnActionPerformed
         // TODO add your handling code here:
         WildlifeUI wildlife = new WildlifeUI();
         wildlife.setVisible(true);
 
         dispose();
-    }//GEN-LAST:event_backBtnActionPerformed
+    }//GEN-LAST:event_BackBtnActionPerformed
 
-    private void exitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBtnActionPerformed
+    private void ExitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExitBtnActionPerformed
         // TODO add your handling code here:
         int confirm = JOptionPane.showConfirmDialog(
             this,
@@ -232,7 +324,136 @@ public class RescueReportForm extends javax.swing.JFrame {
         if (confirm == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
-    }//GEN-LAST:event_exitBtnActionPerformed
+    }//GEN-LAST:event_ExitBtnActionPerformed
+
+    private void SubmitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SubmitBtnActionPerformed
+        // TODO add your handling code here
+        // Generate Rescue Report ID
+        String recordID = String.format("RR%03d", rescueCounter);
+
+        // Get user inputs
+        String species = SpeciesTF.getText().trim();
+        String location = LocationTF.getText().trim();
+        String date = DateTF.getText().trim();
+        String condition = ConditionCB.getSelectedItem().toString();
+
+        // Validate empty fields
+        if (species.isEmpty() || species.equals("Enter a species")
+        || location.isEmpty() || location.equals("Enter a location")
+        || date.isEmpty() || date.equals("DD/MM/YYYY")) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Please fill in all fields.");
+            return;
+        }
+
+        // Validate condition
+        if (ConditionCB.getSelectedIndex() == 0) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Please select an animal condition.");
+            return;
+        }
+
+        // Validate date format (DD/MM/YYYY)
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("dd/MM/uuuu", Locale.UK)
+                .withResolverStyle(ResolverStyle.STRICT);
+
+        try {
+            LocalDate.parse(date, formatter);
+
+        } catch (DateTimeParseException e) {
+
+            JOptionPane.showMessageDialog(this,
+                    "Invalid date! Please use DD/MM/YYYY (e.g. 27/11/2026).");
+            return;
+        }
+
+        // Create RescueReport object
+        RescueReport rescue = new RescueReport();
+
+        // Use setters to store information
+        rescue.setRecordID(recordID);
+        rescue.setSpecies(species);
+        rescue.setLocation(location);
+        rescue.setDate(date);
+        rescue.setCondition(condition);
+
+        // Add object to ArrayList
+        rescueList.add(rescue);
+
+        // Increment counter for the next record
+        rescueCounter++;
+
+        // Display rescue report details using getters
+        ResuceTA.append(rescue.getDetails()
+                + "\n-----------------------------\n");
+
+        // Save ArrayList into dat file
+        saveRescueData();
+
+        // Confirmation message
+        JOptionPane.showMessageDialog(this,
+                "Rescue Report submitted successfully!\nRecord ID: " + recordID);
+        
+    }//GEN-LAST:event_SubmitBtnActionPerformed
+
+    private void ClearBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ClearBtnActionPerformed
+        // TODO add your handling code here:
+        // Reset input fields
+        SpeciesTF.setText("Enter a species");
+        SpeciesTF.setForeground(Color.GRAY);
+
+        LocationTF.setText("Enter a location");
+        LocationTF.setForeground(Color.GRAY);
+
+        DateTF.setText("DD/MM/YYYY");
+        DateTF.setForeground(Color.GRAY);
+
+        idTF.setText("Enter Rescue ID");
+        idTF.setForeground(Color.GRAY);
+
+        // Reset condition
+        ConditionCB.setSelectedIndex(0);
+
+        // Return cursor to Species field
+        SpeciesTF.requestFocus();
+    }//GEN-LAST:event_ClearBtnActionPerformed
+
+    private void SearchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBtnActionPerformed
+        // TODO add your handling code here:
+        // Get the ID entered by the user
+        String searchID = idTF.getText().trim();
+
+        // Validate empty search field
+        if (searchID.isEmpty() || searchID.equals("Enter Rescue ID")) {
+            JOptionPane.showMessageDialog(this,
+                    "Please enter a Rescue Report ID.");
+            return;
+        }
+
+        // Search for the record in ArrayList
+        boolean found = false;
+
+        for (RescueReport rescue : rescueList) {
+
+            if (rescue.getRecordID().equalsIgnoreCase(searchID)) {
+
+                // Display the matching record
+                ResuceTA.setText(rescue.getDetails());
+
+                found = true;
+                break;
+            }
+        }
+
+        // If record does not exist
+        if (!found) {
+            JOptionPane.showMessageDialog(this,
+                    "No Rescue Report found with ID: " + searchID);
+        }
+    }//GEN-LAST:event_SearchBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,24 +481,25 @@ public class RescueReportForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backBtn;
-    private javax.swing.JButton exitBtn;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JButton BackBtn;
+    private javax.swing.JButton ClearBtn;
+    private javax.swing.JLabel ConditionBL;
+    private javax.swing.JComboBox<String> ConditionCB;
+    private javax.swing.JLabel DateBL;
+    private javax.swing.JTextField DateTF;
+    private javax.swing.JButton ExitBtn;
+    private javax.swing.JLabel LocationBL;
+    private javax.swing.JTextField LocationTF;
+    private javax.swing.JLabel RescueBL;
+    private javax.swing.JLabel RescueTitle;
+    private javax.swing.JTextArea ResuceTA;
+    private javax.swing.JLabel SearchBL;
+    private javax.swing.JButton SearchBtn;
+    private javax.swing.JLabel SpeciesBL;
+    private javax.swing.JTextField SpeciesTF;
+    private javax.swing.JButton SubmitBtn;
+    private javax.swing.JTextField idTF;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
     private java.awt.Panel panel1;
     // End of variables declaration//GEN-END:variables
 }

@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package marinewildlife;
+import java.io.Serializable;
 
 /**
  *
  * @author Soe
  */
-public class ConservationRecord {
+public class ConservationRecord implements Serializable{
     // Common attributes shared by both child classes
     private String recordID;
     private String species;
